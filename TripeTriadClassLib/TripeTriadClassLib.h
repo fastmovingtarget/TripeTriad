@@ -10,8 +10,8 @@ namespace TripeTriadClassLib {
 	{
 		private:
 			Board^ gameBoard = gcnew Board();
-			Player^ player = gcnew Player();
-			Player^ computer = gcnew Player();
+			HumanPlayer^ player = gcnew HumanPlayer();
+			ComputerPlayer^ computer = gcnew ComputerPlayer();
 
 		public:
 			GameState(){

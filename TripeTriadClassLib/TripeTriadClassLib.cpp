@@ -8,22 +8,20 @@ using namespace System;
 String^ GameState::placeCard(String^ playerName, int position, int cardIndex) {
 	// This function should handle placing a card on the board
 	// and return a message indicating the result of the action.
-	Control control = Control::CONTROL_EMPTY;
-	if(playerName == "Player")
-		control = Control::CONTROL_PLAYER;
-	else
+	if(playerName != "Player")
 		return "Invalid player name.";
+
+	Control control = Control::CONTROL_PLAYER;
 
 	Card^ selectedCard = player->selectCard(cardIndex); // Get the card from the player's hand
 	if (selectedCard == nullptr) {
 		return "Invalid card index.";
 	}
+
 	gameBoard->placeCard(position, selectedCard, control); // Place the card on the board
 	player->removeCard(cardIndex); // Remove the card from the player's hand
 
-	Card^ computerCard = computer->selectCard(); // The computer selects a card from its hand
-
-	gameBoard->placeCard(computerCard, Control::CONTROL_COMPUTER); // Place the computer's card on the board
+	computer->takeTurn(gameBoard); // Let the computer take its turn
 		
 	// For now, we will just return a simple message.
 	return getGameState();
@@ -37,6 +35,6 @@ String^ GameState::getGameState() {
 void GameState::resetGame() {
 	// Reset the game state, including the board and players
 	gameBoard = gcnew Board();
-	player = gcnew Player();
-	computer = gcnew Player();
+	player = gcnew HumanPlayer();
+	computer = gcnew ComputerPlayer();
 }
