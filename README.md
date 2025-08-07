@@ -27,6 +27,8 @@ This implementation Triple Triad is inspired by the minigame within Final Fantas
     - If the placed card's value is less than the adjacent value on an existing card, the existing card does not change.
 - Play continues until all board spaces are taken.
 
-# Journal
-## 22/07/2025 Initial Commit, Moving and re-factoring library code from existing TT project.
-  - 
+# Status:
+- Basic Gameplay is now complete.
+## Next Steps:
+- Develop an AI for the computer opponent.
+- Add the ability to play with differing rulesets.
