@@ -1,23 +1,37 @@
 #pragma once
 
 #include "Card.h"
+#include "Board.h"
 
 using namespace System;
 
-public ref class Player {
+public ref class Player abstract {
 	private:
 		String^ name;
-		array<Card^>^ hand; // Array of cards in the player's hand
-        int remainingCards = 5; // Number of cards remaining in the player's hand
-		int score = 5; // Player's score
 
 	public:
+		array<Card^>^ hand; // Array of cards in the player's hand
+        int remainingCards = 5; // Number of cards remaining in the player's hand
         Player();
         String^ getHandState();
-        Card^ selectCard(int index);
-        Card^ selectCard();
+        virtual Card^ selectCard(int index) = 0;
         void removeCard(int index);
         int getHandSize() { return remainingCards; } // Get the number of cards in the player's hand
-        int getScore() { return score; }
-        void increaseScore(int amount) { score += amount; }
+};
+
+public ref class ComputerPlayer : public Player {
+    private:
+		Random^ rand = gcnew Random(); // Random number generator for selecting cards
+    public:
+        ComputerPlayer() : Player() {} // Inherit constructor from Player
+        // Override selectCard to randomly select a card from the hand
+        Card^ selectCard(int index) override;
+		void takeTurn(Board^ board); // Method for the computer to take its turn
+};
+
+public ref class HumanPlayer : public Player {
+    public:
+        HumanPlayer() : Player() {} // Inherit constructor from Player
+        // Override selectCard to allow the player to select a card by index
+        Card^ selectCard(int _) override;
 };

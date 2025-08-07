@@ -37,6 +37,12 @@ public ref class Board {
         Board();
         // Print the current state of the board
         String^ getBoardState();
+        bool isSpaceOccupied(int position) {
+            return spaces[position]->occupied(); // Check if the space at the given position is occupied
+		}
+        Card^ getCardAt(int position) {
+            return spaces[position]->getCard(); // Get the card at the specified position
+		}
 
         // Place a card on the board
         void placeCard(int position, Card^ card, Control player);
