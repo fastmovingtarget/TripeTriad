@@ -25,52 +25,29 @@ String^ Board::getBoardState() {
     return boardState->TrimEnd(','); // Return the complete board state
 }
 
-void Board::placeCard(Card^ card, Control player) {
+void Board::placeCard(Card^ card, Control player, RuleSet^ ruleSet) {
     if (player != Control::CONTROL_PLAYER && player != Control::CONTROL_COMPUTER)
         throw gcnew ArgumentException("Invalid player control type");
     for (int i = 0; i < 9; i++) {
         if (!spaces[i]->occupied()) { // Find the first empty space
-            placeCard(i, card, player); // Place the card in the empty space
+            placeCard(i, card, player, ruleSet); // Place the card in the empty space
             return; // Exit after placing the card
         }
     }
     return;
 }
 
-void Board::placeCard(int position, Card^ card, Control player) {
+void Board::placeCard(int position, Card^ card, Control player, RuleSet^ ruleSet) {
     int playerScore = 1;
-	Control control; // Variable to hold the control of the space
     if(player != Control::CONTROL_PLAYER && player != Control::CONTROL_COMPUTER)
 		throw gcnew ArgumentException("Invalid player control type");
 
-    player == Control::CONTROL_PLAYER ? control = Control::CONTROL_PLAYER : control = Control::CONTROL_COMPUTER; // Set the control based on the player
-
     spaces[position]->placeCard(card, player); // Place the card in the specified position
-    // Check if the card can flip adjacent spaces
-    if (position % 3 != 0) { // Check left
-        if (spaces[position - 1]->occupied() && spaces[position - 1]->getCard()->getRightInt() < card->getLeftInt()) {
-            spaces[position - 1]->flipSpace(control); // Flip the left space
-            playerScore++;
-        }
+
+    if (ruleSet->isStandard()) {
+        computeBoardStandard(position, card, player); // Compute the board state based on standard rules
     }
-    if (position % 3 != 2) { // Check right
-        if (spaces[position + 1]->occupied() && spaces[position + 1]->getCard()->getLeftInt() < card->getRightInt()) {
-            spaces[position + 1]->flipSpace(control); // Flip the right space
-            playerScore++;
-        }
-    }
-    if (position >= 3) { // Check above
-        if (spaces[position - 3]->occupied() && spaces[position - 3]->getCard()->getBottomInt() < card->getTopInt()) {
-            spaces[position - 3]->flipSpace(control); // Flip the space above
-            playerScore++;
-        }
-    }
-    if (position < 6) { // Check below
-        if (spaces[position + 3]->occupied() && spaces[position + 3]->getCard()->getTopInt() < card->getBottomInt()) {
-            spaces[position + 3]->flipSpace(control); // Flip the space below
-            playerScore++;
-        }
-    }
+
 }
 
 bool Board::isFull() {
@@ -94,3 +71,32 @@ String^ Board::getScore() {
     }
     return String::Format("{0}{1}", playerScore, computerScore); // Return the scores of both players
 }   
+
+void Board::computeBoardStandard(int position, Card^ card, Control player) {
+
+    Control control; // Variable to hold the control of the space
+	player == Control::CONTROL_PLAYER ? //if the player is the human player
+		control = Control::CONTROL_PLAYER : //sets the control to player
+		control = Control::CONTROL_COMPUTER; // otherwise sets the control to computer
+    // Check if the card can flip adjacent spaces
+    if (position % 3 != 0) { // Check left
+        if (spaces[position - 1]->occupied() && spaces[position - 1]->getCard()->getRightInt() < card->getLeftInt()) {
+            spaces[position - 1]->flipSpace(control); // Flip the left space
+        }
+    }
+    if (position % 3 != 2) { // Check right
+        if (spaces[position + 1]->occupied() && spaces[position + 1]->getCard()->getLeftInt() < card->getRightInt()) {
+            spaces[position + 1]->flipSpace(control); // Flip the right space
+        }
+    }
+    if (position >= 3) { // Check above
+        if (spaces[position - 3]->occupied() && spaces[position - 3]->getCard()->getBottomInt() < card->getTopInt()) {
+            spaces[position - 3]->flipSpace(control); // Flip the space above
+        }
+    }
+    if (position < 6) { // Check below
+        if (spaces[position + 3]->occupied() && spaces[position + 3]->getCard()->getTopInt() < card->getBottomInt()) {
+            spaces[position + 3]->flipSpace(control); // Flip the space below
+        }
+    }
+}

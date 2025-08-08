@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Card.h"
+#include "RuleSet.h"
 
 using namespace System;
 
@@ -32,6 +33,7 @@ public ref class Board {
 
     private:
         array<BoardSpace^>^ spaces = gcnew array<BoardSpace^>(9); // Create an array of 9 BoardSpace objects
+        
 
     public:
         Board();
@@ -45,8 +47,9 @@ public ref class Board {
 		}
 
         // Place a card on the board
-        void placeCard(int position, Card^ card, Control player);
-        void placeCard(Card^ card, Control player);
+        void placeCard(int position, Card^ card, Control player, RuleSet^ ruleSet);
+        void placeCard(Card^ card, Control player, RuleSet^ ruleSet);
+        void computeBoardStandard(int position, Card^ card, Control player);
 
         // Check if the board is full
         bool isFull();
