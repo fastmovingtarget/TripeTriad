@@ -44,10 +44,10 @@ void Board::placeCard(int position, Card^ card, Control player, RuleSet^ ruleSet
 
     spaces[position]->placeCard(card, player); // Place the card in the specified position
 
-    if (ruleSet->isStandard()) {
+    if(ruleSet->isSame()) 
+        computeBoardSame(position, card, player); // Compute the board state based on same rules
+    if (ruleSet->isStandard()) 
         computeBoardStandard(position, card, player); // Compute the board state based on standard rules
-    }
-
 }
 
 bool Board::isFull() {
@@ -99,4 +99,44 @@ void Board::computeBoardStandard(int position, Card^ card, Control player) {
             spaces[position + 3]->flipSpace(control); // Flip the space below
         }
     }
+}
+
+void Board::computeBoardSame(int position, Card^ card, Control player) {
+
+    Control control; // Variable to hold the control of the space
+    player == Control::CONTROL_PLAYER ? //if the player is the human player
+        control = Control::CONTROL_PLAYER : //sets the control to player
+        control = Control::CONTROL_COMPUTER; // otherwise sets the control to computer
+
+    int sameTop = 0;
+	int sameLeft = 0;
+	int sameRight = 0;
+	int sameBottom = 0;
+    // Check if the card can flip adjacent spaces
+    if (position % 3 != 0) // Check left
+        if (spaces[position - 1]->occupied() && spaces[position - 1]->getCard()->getRightInt() == card->getLeftInt())
+			sameLeft = 1; // Mark that the left space is a potential equal
+
+    if (position % 3 != 2) // Check right
+        if (spaces[position + 1]->occupied() && spaces[position + 1]->getCard()->getLeftInt() == card->getRightInt()) 
+			sameRight = 1; // Mark that the right space is a potential equal
+    
+    if (position >= 3) // Check above
+        if (spaces[position - 3]->occupied() && spaces[position - 3]->getCard()->getBottomInt() == card->getTopInt())
+            sameTop = 1; // Mark that the top space is a potential equal
+    
+    if (position < 6) // Check below
+        if (spaces[position + 3]->occupied() && spaces[position + 3]->getCard()->getTopInt() == card->getBottomInt()) 
+            sameBottom = 1; // Mark that the bottom space is a potential equal
+
+    if(sameTop + sameLeft + sameRight + sameBottom >= 2) {
+        if (sameTop == 1)
+			spaces[position - 3]->flipSpace(control); // Flip the space above if it is a potential equal
+        if (sameBottom == 1)
+            spaces[position + 3]->flipSpace(control); // Flip the space above if it is a potential equal
+        if (sameLeft == 1)
+            spaces[position - 1]->flipSpace(control); // Flip the space above if it is a potential equal
+        if (sameRight == 1)
+            spaces[position + 1]->flipSpace(control); // Flip the space above if it is a potential equal
+	}
 }

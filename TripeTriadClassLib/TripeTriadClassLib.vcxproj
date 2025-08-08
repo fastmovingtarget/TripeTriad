@@ -126,6 +126,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="RuleSet.h" />
     <ClInclude Include="TripeTriadClassLib.h" />
   </ItemGroup>
   <ItemGroup>

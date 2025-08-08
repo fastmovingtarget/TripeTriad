@@ -27,9 +27,8 @@ String^ GameState::placeCard(String^ playerName, int position, int cardIndex) {
 	return getGameState();
 }
 
-String^ GameState::getGameState() {
-	
-	return String::Format("{0};{1};{2};{3}", player->getHandState(), gameBoard->getBoardState(), computer->getHandState(), gameBoard->getScore());
+String^ GameState::getGameState() {	
+	return String::Format("{0};{1};{2};{3}", player->getHandState(), gameBoard->getBoardState(), computer->getHandState(ruleSet->isOpen()), gameBoard->getScore());
 }
 
 void GameState::resetGame() {
