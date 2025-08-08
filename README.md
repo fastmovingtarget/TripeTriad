@@ -29,6 +29,6 @@ This implementation Triple Triad is inspired by the minigame within Final Fantas
 
 # Status:
 - Basic Gameplay is now complete.
+- Basic AI implementation is now complete.
 ## Next Steps:
-- Develop an AI for the computer opponent.
 - Add the ability to play with differing rulesets.
