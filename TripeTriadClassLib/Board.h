@@ -11,6 +11,13 @@ public enum class Control : char {
     CONTROL_COMPUTER = 'C' // Controlled by Player 2
 };
 
+public enum class Direction : int {//(NESW style)
+    DIRECTION_UP = 0, // Up direction
+    DIRECTION_RIGHT = 1, // Right direction
+    DIRECTION_DOWN = 2, // Down direction
+	DIRECTION_LEFT = 3 // Left direction 
+};
+
 public ref class Board {
 
     ref class BoardSpace {
@@ -49,8 +56,12 @@ public ref class Board {
         // Place a card on the board
         void placeCard(int position, Card^ card, Control player, RuleSet^ ruleSet);
         void placeCard(Card^ card, Control player, RuleSet^ ruleSet);
+
+        void flipRelativeSpace(Control newControl, int position, Direction direction);
+
         void computeBoardStandard(int position, Card^ card, Control player);
 		void computeBoardSame(int position, Card^ card, Control player, bool wall);
+		void computeBoardPlus(int position, Card^ card, Control player, bool wall);
 
         // Check if the board is full
         bool isFull();

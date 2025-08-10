@@ -46,6 +46,8 @@ void Board::placeCard(int position, Card^ card, Control player, RuleSet^ ruleSet
 
     if(ruleSet->isSame()) 
         computeBoardSame(position, card, player, ruleSet->isWall()); // Compute the board state based on same rules
+    if (ruleSet->isPlus())
+        computeBoardPlus(position, card, player, ruleSet->isWall());
     if (ruleSet->isStandard()) 
         computeBoardStandard(position, card, player); // Compute the board state based on standard rules
 }
@@ -72,6 +74,37 @@ String^ Board::getScore() {
     return String::Format("{0}{1}", playerScore, computerScore); // Return the scores of both players
 }   
 
+void Board::flipRelativeSpace(Control newControl, int position, Direction direction) {
+    if (position < 0 || position >= 9)
+        return;
+
+    switch (direction) {
+        case Direction::DIRECTION_UP:
+            if (position >= 3 && spaces[position - 3]->occupied()) {
+                spaces[position - 3]->flipSpace(newControl); // Flip the space above
+            }
+            break;
+        case Direction::DIRECTION_RIGHT:
+			if (position % 3 != 2 && spaces[position + 1]->occupied()) {
+                spaces[position + 1]->flipSpace(newControl); // Flip the space to the right
+            }
+            break;
+        case Direction::DIRECTION_DOWN:
+			if (position < 6 && spaces[position + 3]->occupied()) {
+                spaces[position + 3]->flipSpace(newControl); // Flip the space below
+            }
+            break;
+        case Direction::DIRECTION_LEFT:
+			if (position % 3 != 0 && spaces[position - 1]->occupied()) {
+                spaces[position - 1]->flipSpace(newControl); // Flip the space to the left
+            }
+            break;
+        default:
+            throw gcnew ArgumentException("Invalid direction");
+    }
+
+}
+
 void Board::computeBoardStandard(int position, Card^ card, Control player) {
 
     Control control; // Variable to hold the control of the space
@@ -79,24 +112,24 @@ void Board::computeBoardStandard(int position, Card^ card, Control player) {
 		control = Control::CONTROL_PLAYER : //sets the control to player
 		control = Control::CONTROL_COMPUTER; // otherwise sets the control to computer
     // Check if the card can flip adjacent spaces
-    if (position % 3 != 0) { // Check left
-        if (spaces[position - 1]->occupied() && spaces[position - 1]->getCard()->getRightInt() < card->getLeftInt()) {
-            spaces[position - 1]->flipSpace(control); // Flip the left space
+    if (position % 3 != 0 && spaces[position - 1]->occupied()) { // Check left
+        if (spaces[position - 1]->getCard()->getRightInt() < card->getLeftInt()) {
+            flipRelativeSpace(player, position, Direction::DIRECTION_LEFT); // Flip the left space
         }
     }
-    if (position % 3 != 2) { // Check right
-        if (spaces[position + 1]->occupied() && spaces[position + 1]->getCard()->getLeftInt() < card->getRightInt()) {
-            spaces[position + 1]->flipSpace(control); // Flip the right space
+    if (position % 3 != 2 && spaces[position + 1]->occupied()) { // Check righ\t
+        if (spaces[position + 1]->getCard()->getLeftInt() < card->getRightInt()) {
+			flipRelativeSpace(player, position, Direction::DIRECTION_RIGHT);// Flip the right space
         }
     }
-    if (position >= 3) { // Check above
-        if (spaces[position - 3]->occupied() && spaces[position - 3]->getCard()->getBottomInt() < card->getTopInt()) {
-            spaces[position - 3]->flipSpace(control); // Flip the space above
+    if (position >= 3 && spaces[position - 3]->occupied()) { // Check above
+        if (spaces[position - 3]->getCard()->getBottomInt() < card->getTopInt()) {
+			flipRelativeSpace(player, position, Direction::DIRECTION_UP); // Flip the space above
         }
     }
-    if (position < 6) { // Check below
-        if (spaces[position + 3]->occupied() && spaces[position + 3]->getCard()->getTopInt() < card->getBottomInt()) {
-            spaces[position + 3]->flipSpace(control); // Flip the space below
+    if (position < 6 && spaces[position + 3]->occupied()) { // Check below
+        if (spaces[position + 3]->getCard()->getTopInt() < card->getBottomInt()) {
+			flipRelativeSpace(player, position, Direction::DIRECTION_DOWN); // Flip the space below
         }
     }
 }
@@ -112,7 +145,6 @@ void Board::computeBoardSame(int position, Card^ card, Control player, bool wall
 	int sameLeft = 0;
 	int sameRight = 0;
 	int sameBottom = 0;
-    int sameWall = 0;
     // Check if the card can flip adjacent spaces
     if (position % 3 != 0) { // Check left
         if (spaces[position - 1]->occupied() && spaces[position - 1]->getCard()->getRightInt() == card->getLeftInt())
@@ -143,13 +175,86 @@ void Board::computeBoardSame(int position, Card^ card, Control player, bool wall
 		sameBottom = 1;
 
     if(sameTop + sameLeft + sameRight + sameBottom >= 2) {
-        if (sameTop == 1 && position >= 3)//don't try to flip the wall if there's no space above
-			spaces[position - 3]->flipSpace(control); // Flip the space above if it is a potential equal
-        if (sameBottom == 1 && position < 6)
-            spaces[position + 3]->flipSpace(control); // Flip the space above if it is a potential equal
-        if (sameLeft == 1 && position % 3 != 0)
-            spaces[position - 1]->flipSpace(control); // Flip the space above if it is a potential equal
-        if (sameRight == 1 && position % 3 != 2)
-            spaces[position + 1]->flipSpace(control); // Flip the space above if it is a potential equal
+        if (sameTop == 1)//don't try to flip the wall if there's no space above
+			flipRelativeSpace(control, position, Direction::DIRECTION_UP); // Flip the space above if it is an equal
+        if (sameBottom == 1)
+			flipRelativeSpace(control, position, Direction::DIRECTION_DOWN); // Flip the space below if it is an equal
+        if (sameLeft == 1)
+			flipRelativeSpace(control, position, Direction::DIRECTION_LEFT); // Flip the left space if it is an equal
+        if (sameRight == 1)
+			flipRelativeSpace(control, position, Direction::DIRECTION_RIGHT); // Flip the right space if it is an equal
 	}
+}
+
+void Board::computeBoardPlus(int position, Card^ card, Control player, bool wall) {
+
+    Control control; // Variable to hold the control of the space
+    player == Control::CONTROL_PLAYER ? //if the player is the human player
+        control = Control::CONTROL_PLAYER : //sets the control to player
+        control = Control::CONTROL_COMPUTER; // otherwise sets the control to computer
+
+    int plusTop = -1;
+    int plusLeft = -1;
+    int plusRight = -1;
+    int plusBottom = -1;
+    // Check if the card can flip adjacent spaces
+    if (position % 3 != 0) { // Check left
+        if (spaces[position - 1]->occupied())
+            plusLeft = spaces[position - 1]->getCard()->getRightInt() + card->getLeftInt();
+    }
+    else if (wall)
+        plusLeft = card->getLeftInt();
+
+    if (position % 3 != 2) { // Check right
+        if (spaces[position + 1]->occupied())
+            plusRight = spaces[position + 1]->getCard()->getLeftInt() + card->getRightInt();
+    }
+    else if (wall)
+		plusRight = card->getRightInt();
+
+    if (position >= 3) { // Check above
+        if (spaces[position - 3]->occupied())
+            plusTop = spaces[position - 3]->getCard()->getBottomInt() + card->getTopInt();
+    }
+	else if (wall)
+		plusTop = card->getTopInt();
+
+    if (position < 6) { // Check below
+        if (spaces[position + 3]->occupied())
+            plusBottom = spaces[position + 3]->getCard()->getTopInt() + card->getBottomInt();
+	}
+	else if (wall)
+		plusBottom = card->getBottomInt();
+    
+	//compare the plus values for all directions to see whether they are equal
+    if (plusTop != -1){
+        if (plusTop == plusRight) {
+			flipRelativeSpace(control, position, Direction::DIRECTION_UP); // Flip the space above
+			flipRelativeSpace(control, position, Direction::DIRECTION_RIGHT); // Flip the right space
+        }
+        if (plusTop == plusBottom) {
+			flipRelativeSpace(control, position, Direction::DIRECTION_UP); // Flip the space above
+			flipRelativeSpace(control, position, Direction::DIRECTION_DOWN); // Flip the space below
+        }        
+        if (plusTop == plusLeft) {
+			flipRelativeSpace(control, position, Direction::DIRECTION_UP); // Flip the space above
+			flipRelativeSpace(control, position, Direction::DIRECTION_LEFT); // Flip the left space
+        }
+    }
+    if(plusRight != -1) {
+        if (plusRight == plusBottom) {
+			flipRelativeSpace(control, position, Direction::DIRECTION_RIGHT); // Flip the right space
+			flipRelativeSpace(control, position, Direction::DIRECTION_DOWN); // Flip the space below
+        }
+		if (plusRight == plusLeft) {
+            flipRelativeSpace(control, position, Direction::DIRECTION_RIGHT); // Flip the right space
+            flipRelativeSpace(control, position, Direction::DIRECTION_LEFT); // Flip the left space
+        }
+    }
+    if (plusBottom != -1) {
+        if (plusBottom == plusLeft) {
+            flipRelativeSpace(control, position, Direction::DIRECTION_DOWN); // Flip the space below
+            flipRelativeSpace(control, position, Direction::DIRECTION_LEFT); // Flip the left space
+        }
+    }
 }

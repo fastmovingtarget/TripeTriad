@@ -4,8 +4,9 @@ public ref class RuleSet {
 private:
 	bool open = false;
 	bool standard = true;
-	bool same = true;
+	bool same = false;
 	bool wall = true; // Indicates if the wall rule is applied
+	bool plus = true;
 public:
 	bool isOpen() {
 		return open; // Return the open rule status
@@ -18,5 +19,8 @@ public:
 	}
 	bool isWall() {
 		return wall;
+	}
+	bool isPlus() {
+		return plus;
 	}
 };
