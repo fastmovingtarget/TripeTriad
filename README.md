@@ -26,6 +26,11 @@ This implementation Triple Triad is inspired by the minigame within Final Fantas
     - If the placed card's value is greater than the adjacent value on an existing card, the existing card flips to the player's ownership.
     - If the placed card's value is less than the adjacent value on an existing card, the existing card does not change.
 - Play continues until all board spaces are taken.
+## Optional Rules:
+- Open (default) - the visibility of the opponent's hand. If open is not set, the opponent's hand is not visible.
+- Same - When a card is played, its side values are compared to the cards around it. If the more than one side value is the SAME as the corresponding values of the cards next to it, flip those spaces to the user's control.
+- Plus - When a card is played, its side values are compared to the cards around it. Add the side values of the card to the corresponding values of the cards next to it. If more than one side adds to the same total, flip those spaces to the user's control.
+- Wall - For comparing values for PLUS and SAME, spaces outside the Tripe Triad board are counted as 0.
 
 # Status:
 - Basic Gameplay is now complete.
