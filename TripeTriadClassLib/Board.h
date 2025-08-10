@@ -50,7 +50,7 @@ public ref class Board {
         void placeCard(int position, Card^ card, Control player, RuleSet^ ruleSet);
         void placeCard(Card^ card, Control player, RuleSet^ ruleSet);
         void computeBoardStandard(int position, Card^ card, Control player);
-		void computeBoardSame(int position, Card^ card, Control player);
+		void computeBoardSame(int position, Card^ card, Control player, bool wall);
 
         // Check if the board is full
         bool isFull();

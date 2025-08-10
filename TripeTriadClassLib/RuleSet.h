@@ -5,6 +5,7 @@ private:
 	bool open = false;
 	bool standard = true;
 	bool same = true;
+	bool wall = true; // Indicates if the wall rule is applied
 public:
 	bool isOpen() {
 		return open; // Return the open rule status
@@ -14,5 +15,8 @@ public:
 	}
 	bool isSame() {
 		return same; // Return the same rule status
+	}
+	bool isWall() {
+		return wall;
 	}
 };
