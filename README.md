@@ -31,6 +31,7 @@ This implementation Triple Triad is inspired by the minigame within Final Fantas
 - Same - When a card is played, its side values are compared to the cards around it. If the more than one side value is the SAME as the corresponding values of the cards next to it, flip those spaces to the user's control.
 - Plus - When a card is played, its side values are compared to the cards around it. Add the side values of the card to the corresponding values of the cards next to it. If more than one side adds to the same total, flip those spaces to the user's control.
 - Wall - For comparing values for PLUS and SAME, spaces outside the Tripe Triad board are counted as 0.
+- Cascade - For Plus and Same, when a card is flipped using these rules it tests to see if it can flip adjoining cards using the standard rules, and cards flipped this way do the same.
 
 # Status:
 - Basic Gameplay is now complete.
