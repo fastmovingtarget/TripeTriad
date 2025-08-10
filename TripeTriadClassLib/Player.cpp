@@ -51,7 +51,19 @@ Card^ ComputerPlayer::selectCard(int _) {
 	return cpuCard;
 }
 
-void ComputerPlayer::takeTurn(Board^ board) {
+String^ ComputerPlayer::getHandState(bool isOpen) {
+	String^ handState = "";
+	for (int i = 0; i < remainingCards; i++) {
+		if (isOpen) {
+			handState += String::Format("{0}{1}{2}{3},", hand[i]->getTop(), hand[i]->getLeft(), hand[i]->getRight(), hand[i]->getBottom());
+		} else {
+			handState += String::Format("****,"); // Hide card details if not open
+		}
+	}
+	return handState->TrimEnd(',');
+}
+
+void ComputerPlayer::takeTurn(Board^ board, RuleSet^ ruleSet) {
 	if (board->isFull())
 		return;
 
@@ -91,6 +103,6 @@ void ComputerPlayer::takeTurn(Board^ board) {
 			}
 		}
 	}
-	board->placeCard(bestPlacementIndex, hand[bestCardIndex], Control::CONTROL_COMPUTER); // Place the best card on the board
+	board->placeCard(bestPlacementIndex, hand[bestCardIndex], Control::CONTROL_COMPUTER, ruleSet); // Place the best card on the board
 	removeCard(bestCardIndex); // Remove the card from the hand
 }

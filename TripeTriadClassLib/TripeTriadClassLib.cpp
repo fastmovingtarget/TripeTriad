@@ -18,18 +18,17 @@ String^ GameState::placeCard(String^ playerName, int position, int cardIndex) {
 		return "Invalid card index.";
 	}
 
-	gameBoard->placeCard(position, selectedCard, control); // Place the card on the board
+	gameBoard->placeCard(position, selectedCard, control, ruleSet); // Place the card on the board
 	player->removeCard(cardIndex); // Remove the card from the player's hand
 
-	computer->takeTurn(gameBoard); // Let the computer take its turn
+	computer->takeTurn(gameBoard, ruleSet); // Let the computer take its turn
 		
 	// For now, we will just return a simple message.
 	return getGameState();
 }
 
-String^ GameState::getGameState() {
-	
-	return String::Format("{0};{1};{2};{3}", player->getHandState(), gameBoard->getBoardState(), computer->getHandState(), gameBoard->getScore());
+String^ GameState::getGameState() {	
+	return String::Format("{0};{1};{2};{3}", player->getHandState(), gameBoard->getBoardState(), computer->getHandState(ruleSet->isOpen()), gameBoard->getScore());
 }
 
 void GameState::resetGame() {

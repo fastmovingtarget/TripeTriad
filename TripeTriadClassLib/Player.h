@@ -26,7 +26,8 @@ public ref class ComputerPlayer : public Player {
         ComputerPlayer() : Player() {} // Inherit constructor from Player
         // Override selectCard to randomly select a card from the hand
         Card^ selectCard(int index) override;
-		void takeTurn(Board^ board); // Method for the computer to take its turn
+        String^ getHandState(bool isOpen);
+		void takeTurn(Board^ board, RuleSet^ ruleSet); // Method for the computer to take its turn
 };
 
 public ref class HumanPlayer : public Player {
