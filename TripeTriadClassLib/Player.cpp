@@ -103,6 +103,6 @@ void ComputerPlayer::takeTurn(Board^ board, RuleSet^ ruleSet) {
 			}
 		}
 	}
-	board->placeCard(bestPlacementIndex, hand[bestCardIndex], Control::CONTROL_COMPUTER, ruleSet); // Place the best card on the board
+	board->placeCard(bestPlacementIndex, hand[bestCardIndex], Control::CONTROL_COMPUTER); // Place the best card on the board
 	removeCard(bestCardIndex); // Remove the card from the hand
 }

@@ -18,7 +18,7 @@ String^ GameState::placeCard(String^ playerName, int position, int cardIndex) {
 		return "Invalid card index.";
 	}
 
-	gameBoard->placeCard(position, selectedCard, control, ruleSet); // Place the card on the board
+	gameBoard->placeCard(position, selectedCard, control); // Place the card on the board
 	player->removeCard(cardIndex); // Remove the card from the player's hand
 
 	computer->takeTurn(gameBoard, ruleSet); // Let the computer take its turn
@@ -33,7 +33,7 @@ String^ GameState::getGameState() {
 
 void GameState::resetGame() {
 	// Reset the game state, including the board and players
-	gameBoard = gcnew Board();
+	gameBoard = gcnew Board(ruleSet);
 	player = gcnew HumanPlayer();
 	computer = gcnew ComputerPlayer();
 }

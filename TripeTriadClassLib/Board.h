@@ -40,10 +40,11 @@ public ref class Board {
 
     private:
         array<BoardSpace^>^ spaces = gcnew array<BoardSpace^>(9); // Create an array of 9 BoardSpace objects
+		RuleSet^ rules; // Reference to the rules of the game
         
 
     public:
-        Board();
+        Board(RuleSet^ ruleSet);
         // Print the current state of the board
         String^ getBoardState();
         bool isSpaceOccupied(int position) {
@@ -54,14 +55,14 @@ public ref class Board {
 		}
 
         // Place a card on the board
-        void placeCard(int position, Card^ card, Control player, RuleSet^ ruleSet);
-        void placeCard(Card^ card, Control player, RuleSet^ ruleSet);
+        void placeCard(int position, Card^ card, Control player);
+        void placeCard(Card^ card, Control player);
 
-        void flipRelativeSpace(Control newControl, int position, Direction direction);
+        void flipRelativeSpace(Control newControl, int position, Direction direction, bool cascade);
 
-        void computeBoardStandard(int position, Card^ card, Control player);
-		void computeBoardSame(int position, Card^ card, Control player, bool wall);
-		void computeBoardPlus(int position, Card^ card, Control player, bool wall);
+        void computeBoardStandard(int position, Card^ card, Control player, bool cascade);
+		void computeBoardSame(int position, Card^ card, Control player);
+		void computeBoardPlus(int position, Card^ card, Control player);
 
         // Check if the board is full
         bool isFull();

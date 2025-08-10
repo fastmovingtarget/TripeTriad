@@ -7,20 +7,13 @@ private:
 	bool same = false;
 	bool wall = true; // Indicates if the wall rule is applied
 	bool plus = true;
+	bool cascade = true; // Indicates if the cascade rule is applied
 public:
-	bool isOpen() {
-		return open; // Return the open rule status
-	}
-	bool isStandard() {
-		return standard; // Return the standard rule status
-	}
-	bool isSame() {
-		return same; // Return the same rule status
-	}
-	bool isWall() {
-		return wall;
-	}
-	bool isPlus() {
-		return plus;
-	}
+	//getters for the rule properties. Don't need setters as these are constants for the game rules
+	bool isOpen() { return open; }
+	bool isStandard() { return standard; }
+	bool isSame() { return same; }
+	bool isWall() { return wall; }
+	bool isPlus() { return plus; }
+	bool isCascade() { return cascade; }
 };
