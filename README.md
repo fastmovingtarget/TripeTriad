@@ -38,4 +38,5 @@ This implementation Triple Triad is inspired by the minigame within Final Fantas
 - Basic AI implementation is now complete.
 - Able to play with different rulesets.
 ## Next Steps:
+- Support better turn visualisation in the UI.
 - Add an options menu to change the current ruleset to the UI.
