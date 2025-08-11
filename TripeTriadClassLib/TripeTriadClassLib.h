@@ -19,6 +19,8 @@ namespace TripeTriadClassLib {
 				// Initialize the game with players and board
 			}
 			String^ placeCard(String^ playerName, int position, int cardIndex);
+			String^ selectOpponentCard();
+			String^ playOpponentCard();
 			String^ getGameState(); // Get the current state of the board
 			void resetGame();
 	};

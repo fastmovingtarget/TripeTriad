@@ -31,7 +31,7 @@ namespace TripeTriadUI
             if (clickedButton != null)
             {
                 TTViewModel viewModel = this.DataContext as TTViewModel;
-                if(viewModel == null)
+                if(viewModel == null || !viewModel.PlayerViewModel.inputEnabled)
                     return;
 
                 viewModel.SelectCard(

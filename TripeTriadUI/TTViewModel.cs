@@ -25,6 +25,7 @@ namespace TripeTriadUI
         public PlayerViewModel PlayerViewModel { get; set; }
         public PlayerViewModel OpponentViewModel { get; set; }
         public BoardViewModel BoardViewModel { get; set; }
+        public bool inputLocked { get; set; } = false; // This is used to prevent input during the opponent's turn
 
         // The index of the selected card in the player's hand
         public int SelectedCardIndex { get; set; } = -1;
@@ -72,15 +73,15 @@ namespace TripeTriadUI
             if (String.IsNullOrEmpty(gameStateParts[0])){
                 if (PlayerViewModel.Score > OpponentViewModel.Score)
                 {
-                    BoardViewModel.DeclareVictory("You win!");
+                    BoardViewModel.ChangeTurnText("You win!");
                 }
                 else if (PlayerViewModel.Score == OpponentViewModel.Score)
                 {
-                    BoardViewModel.DeclareVictory("It's a draw!");
+                    BoardViewModel.ChangeTurnText("It's a draw!");
                 }
                 else
                 {
-                    BoardViewModel.DeclareVictory("You lose!");
+                    BoardViewModel.ChangeTurnText("You lose!");
                 }
             }
         }
@@ -97,13 +98,39 @@ namespace TripeTriadUI
             String gameStateString = GameState.placeCard("Player", boardIndex, SelectedCardIndex);
             SelectedCardIndex = -1; // Reset selected card after playing
             UpdateViewModels(gameStateString);
+            if (gameStateString[0] == ';')
+                return;
+
+            Thread selectThread = new Thread(OpponentTurn);
+            selectThread.Start();
+        }
+        private void OpponentTurn()
+        {
+            BoardViewModel.ChangeTurnText("Opponent's turn");
+            PlayerViewModel.setInputEnabled(false); // Lock input during opponent's turn
+            SelectOpponentCard();
+            PlayOpponentCard();
+            PlayerViewModel.setInputEnabled(true); // Unlock input after opponent's turn
+            BoardViewModel.ChangeTurnText("Your turn");
+        }
+        private void SelectOpponentCard()
+        {
+            Thread.Sleep(500);
+            String gameStateString = GameState.selectOpponentCard();
+            UpdateViewModels(gameStateString);
+        }
+        private void PlayOpponentCard()
+        {
+            Thread.Sleep(500);
+            String gameStateString = GameState.playOpponentCard();
+            UpdateViewModels(gameStateString);
         }
         public void Reset()
         {
             GameState.resetGame();
             String gameStateString = GameState.getGameState();
             UpdateViewModels(gameStateString);
-            BoardViewModel.DeclareVictory("");
+            BoardViewModel.ChangeTurnText("Your turn");
         }
     }
 }

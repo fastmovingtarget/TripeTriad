@@ -32,11 +32,26 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <ItemsControl Name="PlayerHandBox" ItemsSource="{Binding Source={StaticResource PlayerHand}}" HorizontalAlignment="Center" Margin="0,29,0,0" BorderThickness="0">
+            <ItemsControl Name="PlayerHandBox" ItemsSource="{Binding Source={StaticResource PlayerHand}}" 
+                          HorizontalAlignment="Center" Margin="0,29,0,0" BorderThickness="0">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Content="{Binding Print}" Background="{Binding Colour}" HorizontalAlignment="Center" Margin="0,2.5,0,2.5" VerticalAlignment="Top" Height="60" Width="60"
-                                Click="cardButton_Click" Tag="{Binding Index}"/>
+                        <Button Content="{Binding Print}" Background="{Binding Colour}" 
+                                Click="cardButton_Click" Tag="{Binding Index}"
+                                HorizontalAlignment="Center" Margin="0,2.5,0,2.5" VerticalAlignment="Top" Height="60" Width="60">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="{Binding Colour}" />
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="True">
+                                            <Setter Property="Background" Value="{Binding Colour}" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -50,18 +65,20 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <ItemsControl Name="OpponentHandBox" ItemsSource="{Binding Source={StaticResource OpponentHand}}" HorizontalAlignment="Center" Margin="0,29,0,0" BorderThickness="0">
+            <ItemsControl Name="OpponentHandBox" ItemsSource="{Binding Source={StaticResource OpponentHand}}" 
+                          HorizontalAlignment="Center" Margin="0,29,0,0" BorderThickness="0">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Content="{Binding Print}" Background="{Binding Colour}" HorizontalAlignment="Center" Margin="0,2.5,0,2.5" VerticalAlignment="Top" Height="60" Width="60"/>
+                        <Button Content="{Binding Print}" Background="{Binding Colour}" 
+                                HorizontalAlignment="Center" Margin="0,2.5,0,2.5" VerticalAlignment="Top" Height="60" Width="60"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
         <Grid Name="Board" Margin="42,30,85,-20" Grid.Column="1" Grid.RowSpan="2">
-            <TextBlock TextWrapping="Wrap" Text="{Binding Path=BoardViewModel.VictoryString}" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
-            <Button Name="Board1" Content="{Binding Path=BoardViewModel.Spaces[0].Card.Print}" Background="{Binding Path=BoardViewModel.Spaces[0].Colour}" Click="boardButton_Click" Tag="1"
-                HorizontalAlignment="Left" Margin="10,84,0,0" VerticalAlignment="Top" Height="60" Width="60"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding Path=BoardViewModel.TurnString}" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
+            <Button Name="Board1" Content="{Binding Path=BoardViewModel.Spaces[0].Card.Print}" Background="{Binding Path=BoardViewModel.Spaces[0].Colour}" 
+                    Click="boardButton_Click" Tag="1" HorizontalAlignment="Left" Margin="10,84,0,0" VerticalAlignment="Top" Height="60" Width="60"/>
             <Button Name="Board2" Content="{Binding Path=BoardViewModel.Spaces[1].Card.Print}" Background="{Binding Path=BoardViewModel.Spaces[1].Colour}" Click="boardButton_Click" Tag="2"
                 HorizontalAlignment="Left" Margin="75,84,0,0" VerticalAlignment="Top" Height="60" Width="60"/>
             <Button Name="Board3" Content="{Binding Path=BoardViewModel.Spaces[2].Card.Print}" Background="{Binding Path=BoardViewModel.Spaces[2].Colour}" Click="boardButton_Click" Tag="3"

@@ -25,7 +25,10 @@ namespace TripeTriadUI
             Bottom = cardState[3];
             Print = $"     {Top}\n{Left}         {Right}\n     {Bottom}";
             Index=index.ToString();
-            Colour = colour;
+            if(cardState.Length == 4)
+                Colour = colour;
+            else
+                Colour = "SandyBrown"; // Colour for selected computer card
         }
         public void setColour(String newColour)
         {

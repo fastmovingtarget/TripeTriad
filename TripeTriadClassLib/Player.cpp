@@ -44,26 +44,25 @@ Card^ HumanPlayer::selectCard(int index) {
 	return hand[index];
 }
 
-Card^ ComputerPlayer::selectCard(int _) {
-	int index = rand->NextInt64() % remainingCards; // Randomly select a card from the hand
-	Card^ cpuCard = hand[index];
-	removeCard(index); // Remove the selected card from the hand
+Card^ ComputerPlayer::selectCard() {
+	Card^ cpuCard = hand[selectedCardIndex];
 	return cpuCard;
 }
 
 String^ ComputerPlayer::getHandState(bool isOpen) {
 	String^ handState = "";
 	for (int i = 0; i < remainingCards; i++) {
+		String^ isSelected = (i == selectedCardIndex) ? "*" : "";
 		if (isOpen) {
-			handState += String::Format("{0}{1}{2}{3},", hand[i]->getTop(), hand[i]->getLeft(), hand[i]->getRight(), hand[i]->getBottom());
+			handState += String::Format("{0}{1}{2}{3}{4},", hand[i]->getTop(), hand[i]->getLeft(), hand[i]->getRight(), hand[i]->getBottom(), isSelected);
 		} else {
-			handState += String::Format("****,"); // Hide card details if not open
+			handState += String::Format("****{0},", isSelected); // Hide card details if not open
 		}
 	}
 	return handState->TrimEnd(',');
 }
 
-void ComputerPlayer::takeTurn(Board^ board, RuleSet^ ruleSet) {
+void ComputerPlayer::calculateTurn(Board^ board, RuleSet^ ruleSet) {
 	if (board->isFull())
 		return;
 
@@ -103,6 +102,6 @@ void ComputerPlayer::takeTurn(Board^ board, RuleSet^ ruleSet) {
 			}
 		}
 	}
-	board->placeCard(bestPlacementIndex, hand[bestCardIndex], Control::CONTROL_COMPUTER); // Place the best card on the board
-	removeCard(bestCardIndex); // Remove the card from the hand
+	selectedCardIndex = bestCardIndex;
+	selectedPosition = bestPlacementIndex;
 }
