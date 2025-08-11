@@ -20,10 +20,21 @@ String^ GameState::placeCard(String^ playerName, int position, int cardIndex) {
 
 	gameBoard->placeCard(position, selectedCard, control); // Place the card on the board
 	player->removeCard(cardIndex); // Remove the card from the player's hand
-
-	computer->takeTurn(gameBoard, ruleSet); // Let the computer take its turn
-		
+			
 	// For now, we will just return a simple message.
+	return getGameState();
+}
+
+String^ GameState::selectOpponentCard() {
+	computer->calculateTurn(gameBoard, ruleSet); // Let the computer calculate its turn
+	
+	return getGameState();
+}
+
+String^ GameState::playOpponentCard() {
+	gameBoard->placeCard(computer->getSelectedPosition(), computer->selectCard(), Control::CONTROL_COMPUTER); // Place the computer's selected card on the board
+	computer->removeCard(computer->getSelectedCardIndex()); // Remove the card from the computer's hand
+	computer->resetTurn(); // Reset the computer's turn
 	return getGameState();
 }
 

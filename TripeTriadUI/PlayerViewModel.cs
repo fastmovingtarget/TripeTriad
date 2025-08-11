@@ -9,10 +9,15 @@ namespace TripeTriadUI
 {
     public class PlayerViewModel : INotifyPropertyChanged
     {
+        public bool inputEnabled { get; set; } = true; // This is used to prevent input during the opponent's turn
         public String Name { get; }
         public String Colour { get; set; } // This could be used to set the color of the player in the UI
         public int Score { get; set; } = 0; // This could be used to track the player's score
         public List<CardViewModel> Hand { get; set; }
+        public void setInputEnabled(bool locked){
+            inputEnabled = locked;
+            OnPropertyChanged(nameof(inputEnabled));
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

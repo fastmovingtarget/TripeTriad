@@ -52,20 +52,20 @@ namespace TripeTriadUI
             }
         }
 
-        public String VictoryString { get; set; } // This could be used to display the victory condition in the UI
+        public String TurnString { get; set; } // This could be used to display the victory condition in the UI
         public List<BoardSpaceViewModel> Spaces { get; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public BoardViewModel(List<BoardSpaceViewModel> inputSpaces)
         {
             Spaces = inputSpaces;
-            VictoryString = "";
+            TurnString = "";
         }
         public BoardViewModel(String spacesString)
         {
             Spaces = spacesString.Split(',').Select((boardSpaceString, index) =>
                     new BoardSpaceViewModel(boardSpaceString)).ToList(); ;
-            VictoryString = "";
+            TurnString = "";
         }
         public void Update(String boardStateString)
         {
@@ -80,10 +80,10 @@ namespace TripeTriadUI
             }
             OnPropertyChanged(nameof(Spaces));
         }
-        public void DeclareVictory(String victoryString)
+        public void ChangeTurnText(String turnText)
         {
-            VictoryString = victoryString;
-            OnPropertyChanged(nameof(VictoryString));
+            TurnString = turnText;
+            OnPropertyChanged(nameof(TurnString));
         }
         protected void OnPropertyChanged(string propertyName)
         {
