@@ -25,6 +25,7 @@ namespace TripeTriadUI
         public PlayerViewModel PlayerViewModel { get; set; }
         public PlayerViewModel OpponentViewModel { get; set; }
         public BoardViewModel BoardViewModel { get; set; }
+        public RulesModel RulesModel { get; set; } // Default rules for the game
         public bool inputLocked { get; set; } = false; // This is used to prevent input during the opponent's turn
 
         // The index of the selected card in the player's hand
@@ -52,6 +53,8 @@ namespace TripeTriadUI
 
             // We create the BoardViewModel using the board state from the game state parts
             BoardViewModel = new BoardViewModel(gameStateParts[1]);
+
+            RulesModel = new RulesModel(); // Initialize the rules model with default rules
         }
 
         // This method updates the PlayerViewModel, OpponentViewModel, and BoardViewModel based on the game state string
@@ -125,6 +128,12 @@ namespace TripeTriadUI
             String gameStateString = GameState.playOpponentCard();
             UpdateViewModels(gameStateString);
         }
+        public void SubmitRules()
+        {
+            String gameStateString = GameState.setNewRules(RulesModel.ToString());
+            UpdateViewModels(gameStateString);
+        }
+
         public void Reset()
         {
             GameState.resetGame();

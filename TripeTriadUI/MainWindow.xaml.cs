@@ -66,5 +66,14 @@ namespace TripeTriadUI
                 viewModel.Reset();
             }
         }
+
+        private void newRulesButton_Click(object sender, RoutedEventArgs e)
+        {
+            TTViewModel viewModel = DataContext as TTViewModel;
+            if (viewModel != null)
+            {
+                viewModel.SubmitRules();
+            }
+        }
     }
 }
