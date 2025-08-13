@@ -21,6 +21,7 @@ namespace TripeTriadClassLib {
 			String^ placeCard(String^ playerName, int position, int cardIndex);
 			String^ selectOpponentCard();
 			String^ playOpponentCard();
+			String^ setNewRules(String^ ruleSet);
 			String^ getGameState(); // Get the current state of the board
 			void resetGame();
 	};

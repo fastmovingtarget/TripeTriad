@@ -38,6 +38,20 @@ String^ GameState::playOpponentCard() {
 	return getGameState();
 }
 
+String^ GameState::setNewRules(String^ ruleSetString) {
+
+	// Set the new rules for the game
+	ruleSet = gcnew RuleSet(ruleSetString->Contains("Open"),
+							ruleSetString->Contains("Standard"),
+							ruleSetString->Contains("Same"),
+							ruleSetString->Contains("Plus"),
+							ruleSetString->Contains("Wall"),
+							ruleSetString->Contains("Cascade"));
+	// Reset the game board and players to apply the new rules
+	resetGame();
+	return getGameState();
+}
+
 String^ GameState::getGameState() {	
 	return String::Format("{0};{1};{2};{3}", player->getHandState(), gameBoard->getBoardState(), computer->getHandState(ruleSet->isOpen()), gameBoard->getScore());
 }
