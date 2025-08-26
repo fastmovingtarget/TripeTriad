@@ -1,5 +1,5 @@
 # TripeTriad
-This implementation Triple Triad is inspired by the minigame within Final Fantasy 8, owned by Square Enix. There is no capacity for monetisation within this project.
+This implementation Triple Triad is inspired by the minigame within Final Fantasy 8, owned by Square Enix. Go buy their game, mine is worse.
 
 ## Aims and targets
 ### MVP
